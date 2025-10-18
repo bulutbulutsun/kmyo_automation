@@ -73,6 +73,9 @@ define('DB_NAME', 'vardiya_otomasyonu');
 
 ```
 /vardiya/
+├── assets/
+│   └── css/
+│       └── style.css
 ├── config.php
 ├── database.sql
 ├── index.php
