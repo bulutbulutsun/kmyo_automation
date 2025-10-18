@@ -254,4 +254,3 @@ Bu proje eğitim amaçlı geliştirilmiştir.
 
 **Geliştirme Tarihi:** 2025  
 **Versiyon:** 1.0.0  
-**Geliştirici:** Claude (Anthropic)
