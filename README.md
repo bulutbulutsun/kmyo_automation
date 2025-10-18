@@ -25,6 +25,7 @@ Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bi
 - Kişisel nöbet listesi görüntüleme
 - PDF/Yazdırma desteği
 - Aylık özet istatistikler
+- Profil düzenleme, görüntüleme
 
 ## Sistem Gereksinimleri
 
@@ -68,8 +69,8 @@ Ya da phpMyAdmin üzerinden:
 
 ```php
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');           // Kullanıcı adınız
-define('DB_PASS', '');                // Şifreniz
+define('DB_USER', 'root');
+define('DB_PASS', '');
 define('DB_NAME', 'vardiya_otomasyonu');
 ```
 
