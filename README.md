@@ -234,13 +234,6 @@ Kullanıcı:
 - **Veritabanı:** MySQL 8.0
 - **JavaScript:** Vanilla JS
 
-## Notlar
-
-- İlk kurulumda 5 örnek personel ve kullanıcı hesabı oluşturulur
-- Varsayılan şifre tüm kullanıcılar için: `123456`
-- Şifreleri değiştirmeyi unutmayın!
-- Üretim ortamına geçmeden önce güvenlik ayarlarını yapın
-
 ## İleri Seviye Özelleştirmeler
 
 ### Şifre Değiştirme
