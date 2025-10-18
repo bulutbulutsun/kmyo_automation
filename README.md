@@ -1,5 +1,6 @@
-# kmyo_automation
-# Personel Vardiya Otomasyonu Sistemi
+
+# <img width="300" height="300" alt="Manisa-celal-bayar-universitesi-logo" src="https://github.com/user-attachments/assets/f2a39aa9-9583-40c5-9e60-8e4481da62d6" />
+Personel Vardiya Otomasyonu Sistemi
 
 Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bir vardiya yönetim sistemi.
 
@@ -215,6 +216,7 @@ Kullanıcı:
 | `personel_yonetimi.php` | Personel CRUD işlemleri |
 | `raporlar.php` | Detaylı raporlama |
 | `ayarlar.php` | Sistem ayarları |
+| `profil.php` | Profil sayfası |
 
 ### Veritabanı Tabloları
 - `personel` - Personel bilgileri
