@@ -38,6 +38,10 @@ Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bi
 ### 1. Dosyaları Yükleyin
 Tüm dosyaları web sunucunuzun dizinine kopyalayın (örn: `htdocs/vardiya/`)
 
+**Önemli:** Klasör yapısını koruyun:
+- `assets/css/style.css` dosyasının doğru konumda olduğundan emin olun
+- Eğer CSS stilleri yüklenmiyorsa, tarayıcı konsolundan (F12) dosya yolunu kontrol edin
+
 ### 2. Veritabanı Kurulumu
 
 MySQL'de yeni bir veritabanı oluşturun:
@@ -71,6 +75,8 @@ define('DB_NAME', 'vardiya_otomasyonu');
 
 ### 4. Dosya Yapısı
 
+Proje dosyalarınız şu şekilde olmalı:
+
 ```
 /vardiya/
 ├── assets/
@@ -89,6 +95,8 @@ define('DB_NAME', 'vardiya_otomasyonu');
 ├── raporlar.php
 └── ayarlar.php
 ```
+
+**Önemli:** `assets/css/` klasörünü oluşturup `style.css` dosyasını içine koyduğunuzdan emin olun.
 
 ### 5. İlk Giriş
 
@@ -187,6 +195,24 @@ Kullanıcı:
 
 ## Teknik Detaylar
 
+### Dosya Yapısı ve Açıklamalar
+
+| Dosya | Açıklama |
+|-------|----------|
+| `assets/css/style.css` | Ana stil dosyası (tüm CSS kodları burada) |
+| `config.php` | Veritabanı bağlantısı ve yardımcı fonksiyonlar |
+| `database.sql` | Veritabanı yapısı ve örnek veriler |
+| `index.php` | Giriş sayfası |
+| `dashboard.php` | Ana kontrol paneli |
+| `logout.php` | Çıkış işlemi |
+| `nobet_listesi.php` | Kullanıcı nöbet listesi (takvim görünümü) |
+| `nobet_olustur.php` | Otomatik nöbet oluşturma sayfası |
+| `nobet_algoritma.php` | Nöbet dağıtım algoritması |
+| `nobet_duzenle.php` | Manuel nöbet düzenleme |
+| `personel_yonetimi.php` | Personel CRUD işlemleri |
+| `raporlar.php` | Detaylı raporlama |
+| `ayarlar.php` | Sistem ayarları |
+
 ### Veritabanı Tabloları
 - `personel` - Personel bilgileri
 - `kullanicilar` - Giriş bilgileri
@@ -202,32 +228,6 @@ Kullanıcı:
 - **Frontend:** Bootstrap 5.3, Bootstrap Icons
 - **Veritabanı:** MySQL 8.0
 - **JavaScript:** Vanilla JS
-
-## Sorun Giderme
-
-### Veritabanı Bağlantı Hatası
-```
-SQLSTATE[HY000] [1045] Access denied for user
-```
-**Çözüm:** `config.php` dosyasında veritabanı bilgilerinizi kontrol edin.
-
-### Oturum Hatası
-```
-session_start(): Failed to read session data
-```
-**Çözüm:** PHP session klasörünün yazılabilir olduğundan emin olun.
-
-### Türkçe Karakter Sorunu
-**Çözüm:** 
-- Veritabanı karakter setinin `utf8mb4` olduğundan emin olun
-- PHP dosyalarını UTF-8 encoding ile kaydedin
-
-## Destek
-
-Herhangi bir sorun veya öneriniz için:
-- Veritabanı yapısını kontrol edin
-- PHP hata loglarını inceleyin
-- Tarayıcı konsolunu kontrol edin
 
 ## Notlar
 
