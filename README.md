@@ -249,8 +249,3 @@ echo password_hash('yeni_sifre', PASSWORD_DEFAULT);
 ## 📄 Lisans
 
 Bu proje eğitim amaçlı geliştirilmiştir.
-
----
-
-**Geliştirme Tarihi:** 2025  
-**Versiyon:** 1.0.0  
