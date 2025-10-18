@@ -93,7 +93,9 @@ Proje dosyalarınız şu şekilde olmalı:
 ├── nobet_algoritma.php
 ├── personel_yonetimi.php
 ├── raporlar.php
+├── profil.php
 └── ayarlar.php
+
 ```
 
 **Önemli:** `assets/css/` klasörünü oluşturup `style.css` dosyasını içine koyduğunuzdan emin olun.
