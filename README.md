@@ -23,7 +23,7 @@ Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bi
 ### Yönetici Paneli
 - Personel yönetimi (CRUD işlemleri)
 - Otomatik nöbet programı oluşturma
-- Genel nobet listesi
+- Genel nöbet listesi
 - Manuel nöbet düzenleme
 - Detaylı raporlama
 - Sistem ayarları (Resmi tatiller, Vardiya şablonları)
