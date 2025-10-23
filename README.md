@@ -4,6 +4,11 @@ Personel Vardiya Otomasyonu Sistemi
 
 Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bir vardiya yönetim sistemi.
 
+## Diyagram
+<img width="4498" height="2978" alt="o5fit2l" src="https://github.com/user-attachments/assets/c61b5c0e-bb31-4184-b678-7088302a2eee" />
+
+
+
 ## Özellikler
 
 ### Genel Özellikler
@@ -18,6 +23,7 @@ Manisa Celal Bayar Üniversitesi için geliştirilmiş, MySQL tabanlı modern bi
 ### Yönetici Paneli
 - Personel yönetimi (CRUD işlemleri)
 - Otomatik nöbet programı oluşturma
+- Genel nobet listesi
 - Manuel nöbet düzenleme
 - Detaylı raporlama
 - Sistem ayarları (Resmi tatiller, Vardiya şablonları)
@@ -89,6 +95,7 @@ Proje dosyalarınız şu şekilde olmalı:
 ├── index.php
 ├── dashboard.php
 ├── logout.php
+├── genel_nobet_listesi.php
 ├── nobet_listesi.php
 ├── nobet_olustur.php
 ├── nobet_duzenle.php
@@ -109,14 +116,14 @@ Tarayıcınızda sisteme erişin:
 http://localhost/vardiya/
 ```
 
-**Demo Hesaplar:**
+**Deneme Hesapları:**
 
 Yönetici:
-- Kullanıcı Adı: `admin`
+- Kullanıcı Adı: `bulut`
 - Şifre: `123456`
 
 Kullanıcı:
-- Kullanıcı Adı: `ayse`
+- Kullanıcı Adı: `busra`
 - Şifre: `123456`
 
 ## Kullanım Kılavuzu
@@ -210,6 +217,7 @@ Kullanıcı:
 | `dashboard.php` | Ana kontrol paneli |
 | `logout.php` | Çıkış işlemi |
 | `nobet_listesi.php` | Kullanıcı nöbet listesi (takvim görünümü) |
+| `genel_nobet_listesi.php` | Toplu nöbet listesi |
 | `nobet_olustur.php` | Otomatik nöbet oluşturma sayfası |
 | `nobet_algoritma.php` | Nöbet dağıtım algoritması |
 | `nobet_duzenle.php` | Manuel nöbet düzenleme |
