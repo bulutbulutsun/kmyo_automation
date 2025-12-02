@@ -96,12 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <strong><i class="bi bi-info-circle me-1"></i> Deneme Hesapları:</strong>
                 <div class="mb-2">
                     <strong>Yönetici:</strong><br>
-                    Kullanıcı: <code>bulut</code><br>
+                    Kullanıcı: <code>admin</code><br>
                     Şifre: <code>123456</code>
                 </div>
                 <div>
                     <strong>Kullanıcı:</strong><br>
-                    Kullanıcı: <code>rukiye</code><br>
+                    Kullanıcı: <code>busra</code><br>
                     Şifre: <code>123456</code>
                 </div>
             </div>
