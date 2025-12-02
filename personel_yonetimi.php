@@ -35,8 +35,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ekle'])) {
             
             $personel_id = $db->lastInsertId();
             
-            // Kullanıcı hesabı oluştur
+            // Kullanıcı hesabı oluştur - Benzersiz kullanıcı adı
             $kullanici_adi = strtolower($ad);
+            
+            // Aynı kullanıcı adı varsa sonuna sayı ekle
+            $counter = 1;
+            $original_username = $kullanici_adi;
+            while ($db->fetchOne("SELECT id FROM kullanicilar WHERE kullanici_adi = ?", array($kullanici_adi))) {
+                $kullanici_adi = $original_username . $counter;
+                $counter++;
+            }
+            
             $sifre = Helper::hashPassword('123456');
             
             $db->query(
