@@ -97,7 +97,7 @@ foreach ($rapor_verileri as $veri) {
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 px-0 sidebar no-print">
+            <div class="col-md-3 col-lg-2 px-0 sidebar">
                 <nav class="nav flex-column py-3">
                     <a class="nav-link" href="dashboard.php">
                         <i class="bi bi-speedometer2"></i>Ana Sayfa
@@ -110,7 +110,7 @@ foreach ($rapor_verileri as $veri) {
                     <a class="nav-link" href="personel_yonetimi.php">
                         <i class="bi bi-people"></i>Personel Yönetimi
                     </a>
-                    <a class="nav-link active" href="genel_nobet_listesi.php">
+					<a class="nav-link" href="genel_nobet_listesi.php">
                         <i class="bi bi-list-ul"></i>Genel Nöbet Listesi
                     </a>
                     <a class="nav-link" href="nobet_olustur.php">
