@@ -119,7 +119,7 @@ http://localhost/vardiya/
 **Deneme Hesapları:**
 
 Yönetici:
-- Kullanıcı Adı: `bulut`
+- Kullanıcı Adı: `admin`
 - Şifre: `123456`
 
 Kullanıcı:
