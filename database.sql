@@ -64,7 +64,7 @@ CREATE TABLE `kullanicilar`  (
 -- ----------------------------
 -- Records of kullanicilar
 -- ----------------------------
-INSERT INTO `kullanicilar` VALUES (1, 1, 'admin', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'yonetici', '2025-11-27 10:33:09');
+INSERT INTO `kullanicilar` VALUES (1, 1, 'admin', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'yonetici', NULL);
 INSERT INTO `kullanicilar` VALUES (2, 2, 'rukiye', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
 INSERT INTO `kullanicilar` VALUES (3, 3, 'cihan', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
 INSERT INTO `kullanicilar` VALUES (4, 4, 'busra', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
@@ -232,3 +232,4 @@ INSERT INTO `vardiya_sablonlari` VALUES (4, 'İç Vardiya 1', 'kampus_ici', '08:
 INSERT INTO `vardiya_sablonlari` VALUES (5, 'İç Vardiya 2', 'kampus_ici', '09:00:00', '17:00:00', 8.00, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
