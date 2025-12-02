@@ -232,7 +232,7 @@ foreach ($nobetler as $nobet) {
                 <?php else: ?>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
-                        Seçilen ay için nöbet kaydı bulunamadı.
+                        Seçilen ay için nöbet kaydı bulunamadı!
                     </div>
                 <?php endif; ?>
             </div>
@@ -271,7 +271,7 @@ foreach ($nobetler as $nobet) {
                         <div class="alert alert-warning">
                             <small>
                                 <i class="bi bi-exclamation-triangle me-1"></i>
-                                Vardiya seçilmezse personel o gün hafta tatiline alınır.
+                                Vardiya seçilmezse personel o gün hafta tatiline alınır!
                             </small>
                         </div>
                     </div>
