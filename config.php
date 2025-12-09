@@ -56,7 +56,7 @@ class Database {
             $stmt->execute($params);
             return $stmt;
         } catch(PDOException $e) {
-            error_log("SQL Hatası: " . $e->getMessage());
+            error_log("SQL HATA: " . $e->getMessage());
             throw $e;
         }
     }
@@ -84,7 +84,7 @@ class Helper {
     
     // Güvenli çıktı
     public static function escape($string) {
-        return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($string ?? '', ENT_QUOTES, 'UTF-8');
     }
     
     // Tarih formatlama
@@ -152,34 +152,10 @@ class Helper {
                 </div>';
     }
     
-    // Bilgi mesajı
-    public static function showInfo($message) {
-        return '<div class="alert alert-info alert-dismissible fade show" role="alert">
-                    ' . self::escape($message) . '
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>';
-    }
-    
     // Yönlendirme
     public static function redirect($url) {
         header("Location: " . $url);
         exit();
-    }
-    
-    // CSRF Token oluştur
-    public static function generateCSRFToken() {
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
-        return $_SESSION['csrf_token'];
-    }
-    
-    // CSRF Token doğrula
-    public static function verifyCSRFToken($token) {
-        if (!isset($_SESSION['csrf_token']) || $token !== $_SESSION['csrf_token']) {
-            return false;
-        }
-        return true;
     }
 }
 
@@ -253,14 +229,15 @@ class Auth {
         $this->db = Database::getInstance();
     }
     
-    // Giriş yap
-    public function login($kullanici_adi, $sifre) {
-        $sql = "SELECT k.*, p.ad, p.soyad, p.sicil_no 
+    // Giriş yap - E-POSTA İLE
+    public function login($eposta, $sifre) {
+        // E-posta üzerinden personel ve kullanıcı bilgilerini birleştiriyoruz
+        $sql = "SELECT k.*, p.ad, p.soyad, p.sicil_no, p.eposta
                 FROM kullanicilar k 
                 INNER JOIN personel p ON k.personel_id = p.id 
-                WHERE k.kullanici_adi = ? AND p.aktif = 1";
+                WHERE p.eposta = ? AND p.aktif = 1";
         
-        $user = $this->db->fetchOne($sql, array($kullanici_adi));
+        $user = $this->db->fetchOne($sql, array($eposta));
         
         if ($user && Helper::verifyPassword($sifre, $user['sifre'])) {
             Session::set('user_id', $user['id']);

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guncelle'])) {
         }
         $message = 'Nöbet kaydı güncellendi!';
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 

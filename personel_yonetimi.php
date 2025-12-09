@@ -20,13 +20,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ekle'])) {
     $telefon = trim($_POST['telefon'] ?? '');
     $eposta = trim($_POST['eposta'] ?? '');
     $adres = trim($_POST['adres'] ?? '');
+    $rol = $_POST['rol'] ?? 'kullanici';
     $tercih_gun1 = $_POST['tercih_gun1'] ?? null;
     $tercih_gun2 = $_POST['tercih_gun2'] ?? null;
     
-    if (empty($sicil_no) || empty($ad) || empty($soyad) || empty($kimlik_no) || empty($kadro_turu)) {
-        $error = 'Zorunlu alanları doldurunuz!';
+    if (empty($sicil_no) || empty($ad) || empty($soyad) || empty($kimlik_no) || empty($kadro_turu) || empty($eposta)) {
+        $error = 'E-posta dahil zorunlu alanları doldurunuz!';
     } else {
         try {
+            // 1. E-posta benzersizlik kontrolü
+            $mevcut_eposta = $db->fetchOne("SELECT id FROM personel WHERE eposta = ?", array($eposta));
+            if ($mevcut_eposta) {
+                throw new Exception("Bu e-posta adresi zaten kullanılıyor!");
+            }
+
+            // 2. Sicil no benzersizlik kontrolü
+            $mevcut_sicil = $db->fetchOne("SELECT id FROM personel WHERE sicil_no = ?", array($sicil_no));
+            if ($mevcut_sicil) {
+                throw new Exception("Bu sicil numarası zaten kullanılıyor!");
+            }
+
+            // 3. T.C. Kimlik No benzersizlik kontrolü
+            $mevcut_kimlik = $db->fetchOne("SELECT id FROM personel WHERE kimlik_no = ?", array($kimlik_no));
+            if ($mevcut_kimlik) {
+                throw new Exception("Bu T.C. kimlik numarası zaten sisteme kayıtlı!");
+            }
+
             $db->query(
                 "INSERT INTO personel (sicil_no, ad, soyad, kimlik_no, kadro_turu, gorev_unvani, telefon, eposta, adres) 
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
@@ -35,23 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ekle'])) {
             
             $personel_id = $db->lastInsertId();
             
-            // Kullanıcı hesabı oluştur - Benzersiz kullanıcı adı
-            $kullanici_adi = strtolower($ad);
-            
-            // Aynı kullanıcı adı varsa sonuna sayı ekle
-            $counter = 1;
-            $original_username = $kullanici_adi;
-            while ($db->fetchOne("SELECT id FROM kullanicilar WHERE kullanici_adi = ?", array($kullanici_adi))) {
-                $kullanici_adi = $original_username . $counter;
-                $counter++;
-            }
-            
+            // Kullanıcı hesabı oluştur (Kullanıcı adı yok, sadece şifre ve rol)
             $sifre = Helper::hashPassword('123456');
             
             $db->query(
-                "INSERT INTO kullanicilar (personel_id, kullanici_adi, sifre, rol) 
-                 VALUES (?, ?, ?, 'kullanici')",
-                array($personel_id, $kullanici_adi, $sifre)
+                "INSERT INTO kullanicilar (personel_id, sifre, rol) 
+                 VALUES (?, ?, ?)",
+                array($personel_id, $sifre, $rol)
             );
             
             // İzin tercihleri
@@ -63,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ekle'])) {
                 );
             }
             
-            $message = 'Personel başarıyla eklendi! Kullanıcı adı: ' . $kullanici_adi . ', Şifre: 123456';
+            $message = 'Personel başarıyla eklendi! Giriş e-postası: ' . $eposta . ', Varsayılan Şifre: 123456';
         } catch (Exception $e) {
             $error = 'Hata: ' . $e->getMessage();
         }
@@ -82,16 +91,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guncelle'])) {
     $telefon = trim($_POST['telefon'] ?? '');
     $eposta = trim($_POST['eposta'] ?? '');
     $adres = trim($_POST['adres'] ?? '');
+    $rol = $_POST['rol'] ?? 'kullanici';
     $tercih_gun1 = $_POST['tercih_gun1'] ?? null;
     $tercih_gun2 = $_POST['tercih_gun2'] ?? null;
     
     try {
+        // E-posta başkası tarafından kullanılıyor mu kontrolü
+        $mevcut_eposta = $db->fetchOne("SELECT id FROM personel WHERE eposta = ? AND id != ?", array($eposta, $personel_id));
+        if ($mevcut_eposta) {
+            throw new Exception("Bu e-posta adresi başka bir personel tarafından kullanılıyor!");
+        }
+
+        // Sicil No başkası tarafından kullanılıyor mu kontrolü
+        $mevcut_sicil = $db->fetchOne("SELECT id FROM personel WHERE sicil_no = ? AND id != ?", array($sicil_no, $personel_id));
+        if ($mevcut_sicil) {
+            throw new Exception("Bu sicil numarası başka bir personel tarafından kullanılıyor!");
+        }
+
+        // T.C. Kimlik No başkası tarafından kullanılıyor mu kontrolü
+        $mevcut_kimlik = $db->fetchOne("SELECT id FROM personel WHERE kimlik_no = ? AND id != ?", array($kimlik_no, $personel_id));
+        if ($mevcut_kimlik) {
+            throw new Exception("Bu T.C. Kimlik numarası başka bir personel tarafından kullanılıyor!");
+        }
+
         $db->query(
             "UPDATE personel SET sicil_no=?, ad=?, soyad=?, kimlik_no=?, kadro_turu=?, 
              gorev_unvani=?, telefon=?, eposta=?, adres=? WHERE id=?",
             array($sicil_no, $ad, $soyad, $kimlik_no, $kadro_turu, $gorev_unvani, $telefon, $eposta, $adres, $personel_id)
         );
         
+        // Rolü güncelle
+        $db->query(
+            "UPDATE kullanicilar SET rol=? WHERE personel_id=?",
+            array($rol, $personel_id)
+        );
+
         // İzin tercihleri güncelle
         $mevcut_tercih = $db->fetchOne("SELECT * FROM izin_tercihleri WHERE personel_id = ?", array($personel_id));
         
@@ -108,9 +142,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guncelle'])) {
             );
         }
         
-        $message = 'Personel bilgileri güncellendi!';
+        $message = 'Personel bilgileri ve yetkileri güncellendi!';
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 
@@ -122,14 +156,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sil'])) {
         $db->query("UPDATE personel SET aktif = 0 WHERE id = ?", array($personel_id));
         $message = 'Personel pasif duruma getirildi!';
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 
-// Tüm personelleri getir
+// Tüm personelleri ve rollerini getir
 $personeller = $db->fetchAll(
-    "SELECT p.*, it.tercih_edilen_gun1, it.tercih_edilen_gun2 
+    "SELECT p.*, k.rol, it.tercih_edilen_gun1, it.tercih_edilen_gun2 
      FROM personel p 
+     LEFT JOIN kullanicilar k ON p.id = k.personel_id
      LEFT JOIN izin_tercihleri it ON p.id = it.personel_id 
      ORDER BY p.aktif DESC, p.ad ASC"
 );
@@ -237,8 +272,8 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                         <th>Sicil No</th>
                                         <th>Ad Soyad</th>
                                         <th>Kadro</th>
-                                        <th>Görev</th>
-                                        <th>Telefon</th>
+                                        <th>Yetki</th>
+                                        <th>E-posta</th>
                                         <th>Hafta Tatili Tercihi</th>
                                         <th>Durum</th>
                                         <th>İşlemler</th>
@@ -254,8 +289,12 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                                     <?php echo $p['kadro_turu'] === 'memur' ? 'Memur' : 'İşçi'; ?>
                                                 </span>
                                             </td>
-                                            <td><?php echo Helper::escape($p['gorev_unvani']); ?></td>
-                                            <td><?php echo Helper::escape($p['telefon']); ?></td>
+                                            <td>
+                                                <span class="badge <?php echo $p['rol'] === 'yonetici' ? 'bg-danger' : 'bg-secondary'; ?>">
+                                                    <?php echo $p['rol'] === 'yonetici' ? 'Yönetici' : 'Kullanıcı'; ?>
+                                                </span>
+                                            </td>
+                                            <td><?php echo Helper::escape($p['eposta']); ?></td>
                                             <td>
                                                 <?php 
                                                 $tercihler = array();
@@ -285,6 +324,7 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                                         data-telefon="<?php echo Helper::escape($p['telefon']); ?>"
                                                         data-eposta="<?php echo Helper::escape($p['eposta']); ?>"
                                                         data-adres="<?php echo Helper::escape($p['adres']); ?>"
+                                                        data-rol="<?php echo $p['rol']; ?>"
                                                         data-tercih1="<?php echo $p['tercih_edilen_gun1'] ?? ''; ?>"
                                                         data-tercih2="<?php echo $p['tercih_edilen_gun2'] ?? ''; ?>">
                                                     <i class="bi bi-pencil"></i>
@@ -345,18 +385,25 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Görev Unvanı</label>
-                                <input type="text" class="form-control" name="gorev_unvani">
+                                <label class="form-label">Sistem Rolü *</label>
+                                <select class="form-select" name="rol" required>
+                                    <option value="kullanici">Kullanıcı (Standart)</option>
+                                    <option value="yonetici">Yönetici</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">E-posta (Giriş İçin) *</label>
+                                <input type="email" class="form-control" name="eposta" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Telefon</label>
                                 <input type="text" class="form-control" name="telefon">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">E-posta</label>
-                                <input type="email" class="form-control" name="eposta">
+                                <label class="form-label">Görev Unvanı</label>
+                                <input type="text" class="form-control" name="gorev_unvani">
                             </div>
-                            <div class="col-md-12 mb-3">
+                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Adres</label>
                                 <textarea class="form-control" name="adres" rows="2"></textarea>
                             </div>
@@ -426,16 +473,23 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Görev Unvanı</label>
-                                <input type="text" class="form-control" name="gorev_unvani" id="edit_gorev_unvani">
+                                <label class="form-label">Sistem Rolü *</label>
+                                <select class="form-select" name="rol" id="edit_rol" required>
+                                    <option value="kullanici">Kullanıcı (Standart)</option>
+                                    <option value="yonetici">Yönetici</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">E-posta (Giriş İçin) *</label>
+                                <input type="email" class="form-control" name="eposta" id="edit_eposta" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Telefon</label>
                                 <input type="text" class="form-control" name="telefon" id="edit_telefon">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">E-posta</label>
-                                <input type="email" class="form-control" name="eposta" id="edit_eposta">
+                                <label class="form-label">Görev Unvanı</label>
+                                <input type="text" class="form-control" name="gorev_unvani" id="edit_gorev_unvani">
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Adres</label>
@@ -472,20 +526,11 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Sayfa yüklendiğinde çalışacak
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Sayfa yüklendi, butonlar dinleniyor...');
-        
-        // Tüm düzenle butonlarını seç
         const editButtons = document.querySelectorAll('.btn-edit-personel');
-        console.log('Bulunan düzenle butonu sayısı:', editButtons.length);
         
-        // Her butona tıklama olayı ekle
         editButtons.forEach(function(button) {
             button.addEventListener('click', function() {
-                console.log('Düzenle butonuna tıklandı!');
-                
-                // Butondan verileri al
                 const id = this.getAttribute('data-id');
                 const sicil = this.getAttribute('data-sicil');
                 const kimlik = this.getAttribute('data-kimlik');
@@ -496,12 +541,10 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                 const telefon = this.getAttribute('data-telefon');
                 const eposta = this.getAttribute('data-eposta');
                 const adres = this.getAttribute('data-adres');
+                const rol = this.getAttribute('data-rol');
                 const tercih1 = this.getAttribute('data-tercih1');
                 const tercih2 = this.getAttribute('data-tercih2');
                 
-                console.log('Alınan veriler:', {id, ad, soyad});
-                
-                // Form alanlarını doldur
                 document.getElementById('edit_personel_id').value = id;
                 document.getElementById('edit_sicil_no').value = sicil;
                 document.getElementById('edit_kimlik_no').value = kimlik;
@@ -512,16 +555,12 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                 document.getElementById('edit_telefon').value = telefon;
                 document.getElementById('edit_eposta').value = eposta;
                 document.getElementById('edit_adres').value = adres;
+                document.getElementById('edit_rol').value = rol;
                 document.getElementById('edit_tercih_gun1').value = tercih1;
                 document.getElementById('edit_tercih_gun2').value = tercih2;
                 
-                console.log('Form alanları dolduruldu');
-                
-                // Modal'ı göster
                 const modal = new bootstrap.Modal(document.getElementById('duzenleModal'));
                 modal.show();
-                
-                console.log('Modal açıldı');
             });
         });
     });

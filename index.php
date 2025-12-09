@@ -13,17 +13,17 @@ $success = '';
 
 // Form gönderildiğinde
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $kullanici_adi = trim($_POST['kullanici_adi'] ?? '');
+    $eposta = trim($_POST['eposta'] ?? '');
     $sifre = $_POST['sifre'] ?? '';
     
-    if (empty($kullanici_adi) || empty($sifre)) {
-        $error = 'Kullanıcı adı ve şifre gereklidir!';
+    if (empty($eposta) || empty($sifre)) {
+        $error = 'E-posta ve şifre gereklidir!';
     } else {
         $auth = new Auth();
-        if ($auth->login($kullanici_adi, $sifre)) {
+        if ($auth->login($eposta, $sifre)) {
             Helper::redirect('dashboard.php');
         } else {
-            $error = 'Kullanıcı adı veya şifre hatalı!';
+            $error = 'E-posta veya şifre hatalı!';
         }
     }
 }
@@ -66,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <form method="POST" action="">
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Kullanıcı Adı</label>
+                    <label class="form-label fw-bold">E-posta</label>
                     <div class="input-group">
                         <span class="input-group-text">
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-envelope"></i>
                         </span>
-                        <input type="text" class="form-control" name="kullanici_adi" 
-                               placeholder="Kullanıcı adınızı giriniz" required autofocus>
+                        <input type="email" class="form-control" name="eposta" 
+                               placeholder="ornek@cbu.edu.tr" required autofocus>
                     </div>
                 </div>
                 
@@ -93,15 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
             
             <div class="demo-info">
-                <strong><i class="bi bi-info-circle me-1"></i> Deneme Hesapları:</strong>
+                <strong><i class="bi bi-info-circle me-1"></i> Yönetici Girişi:</strong>
                 <div class="mb-2">
-                    <strong>Yönetici:</strong><br>
-                    Kullanıcı: <code>bulut</code><br>
+                    E-posta: <code>bulut.bulutsun@cbu.edu.tr</code><br>
                     Şifre: <code>123456</code>
                 </div>
-                <div>
-                    <strong>Kullanıcı:</strong><br>
-                    Kullanıcı: <code>rukiye</code><br>
+                 <strong><i class="bi bi-info-circle me-1"></i> Personel Girişi:</strong>
+                <div class="mb-2">
+                    E-posta: <code>busra.ton@cbu.edu.tr</code><br>
                     Şifre: <code>123456</code>
                 </div>
             </div>

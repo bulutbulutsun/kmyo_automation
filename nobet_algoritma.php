@@ -171,11 +171,11 @@ class NobetAlgoritma {
             
             return array(
                 'basarili' => true, 
-                'mesaj' => "Nöbet programı başarıyla oluşturuldu! Toplam {$toplam_gun} gün için {$eklenen_nobet} nöbet kaydı eklendi."
+                'mesaj' => "Nöbet programı başarıyla oluşturuldu! Toplam {$toplam_gun} gün için {$eklenen_nobet} nöbet kaydı eklendi!"
             );
             
         } catch (Exception $e) {
-            return array('basarili' => false, 'mesaj' => 'Hata: ' . $e->getMessage());
+            return array('basarili' => false, 'mesaj' => 'HATA: ' . $e->getMessage());
         }
     }
     

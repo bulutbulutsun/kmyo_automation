@@ -10,9 +10,9 @@ $personel_id = Session::getPersonelId();
 $message = '';
 $error = '';
 
-// Personel bilgilerini getir
+// Personel bilgilerini getir (Kullanıcı adı sütunu artık yok, k.rol var)
 $personel = $db->fetchOne(
-    "SELECT p.*, k.kullanici_adi, k.rol, it.tercih_edilen_gun1, it.tercih_edilen_gun2 
+    "SELECT p.*, k.rol, it.tercih_edilen_gun1, it.tercih_edilen_gun2 
      FROM personel p 
      INNER JOIN kullanicilar k ON p.id = k.personel_id 
      LEFT JOIN izin_tercihleri it ON p.id = it.personel_id 
@@ -60,27 +60,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['bilgi_guncelle'])) {
     $adres = trim($_POST['adres'] ?? '');
     
     try {
+        // E-posta benzersizlik kontrolü (kendisi hariç)
+        $mevcut = $db->fetchOne("SELECT id FROM personel WHERE eposta = ? AND id != ?", array($eposta, $personel_id));
+        if ($mevcut) {
+            throw new Exception("Bu e-posta adresi başka bir kullanıcı tarafından kullanılıyor!");
+        }
+
         $db->query(
             "UPDATE personel SET telefon = ?, eposta = ?, adres = ? WHERE id = ?",
             array($telefon, $eposta, $adres, $personel_id)
         );
         $message = 'İletişim bilgileriniz güncellendi!';
         
-        // Sayfayı yenile
-        header("Location: profil.php?success=1");
-        exit();
+        // Değişiklikleri anlık görmek için diziyi güncelle
+        $personel['telefon'] = $telefon;
+        $personel['eposta'] = $eposta;
+        $personel['adres'] = $adres;
+
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 
 // Gün isimleri
 $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi');
-
-// Başarı mesajı
-if (isset($_GET['success'])) {
-    $message = 'İletişim bilgileriniz güncellendi!';
-}
 ?>
 <!DOCTYPE html>
 <html lang="tr">
@@ -209,8 +212,8 @@ if (isset($_GET['success'])) {
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label class="text-muted small">Kullanıcı Adı</label>
-                                    <p class="fw-bold"><?php echo Helper::escape($personel['kullanici_adi']); ?></p>
+                                    <label class="text-muted small">Giriş E-postası</label>
+                                    <p class="fw-bold text-primary"><?php echo Helper::escape($personel['eposta']); ?></p>
                                 </div>
                                 
                                 <div class="mb-0">
@@ -222,7 +225,7 @@ if (isset($_GET['success'])) {
                                     </p>
                                 </div>
                                 
-                                <div class="mb-0">
+                                <div class="mb-0 mt-3">
                                     <label class="text-muted small">Hafta Tatili Tercihleri</label>
                                     <p class="fw-bold">
                                         <?php 
@@ -251,6 +254,10 @@ if (isset($_GET['success'])) {
                             </div>
                             <div class="card-body">
                                 <form method="POST">
+                                    <div class="alert alert-info py-2">
+                                        <small><i class="bi bi-info-circle me-1"></i> E-posta adresinizi değiştirirseniz giriş yaparken yeni adresinizi kullanmalısınız.</small>
+                                    </div>
+
                                     <div class="mb-3">
                                         <label class="form-label">Telefon</label>
                                         <input type="text" class="form-control" name="telefon" 
@@ -258,9 +265,9 @@ if (isset($_GET['success'])) {
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label class="form-label">E-posta</label>
+                                        <label class="form-label">E-posta (Giriş)</label>
                                         <input type="email" class="form-control" name="eposta" 
-                                               value="<?php echo Helper::escape($personel['eposta']); ?>">
+                                               value="<?php echo Helper::escape($personel['eposta']); ?>" required>
                                     </div>
                                     
                                     <div class="mb-3">

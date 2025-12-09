@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tatil_ekle'])) {
             );
             $message = 'Resmi tatil başarıyla eklendi!';
         } catch (Exception $e) {
-            $error = 'Hata: ' . $e->getMessage();
+            $error = 'HATA: ' . $e->getMessage();
         }
     }
 }
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['tatil_sil'])) {
         $db->query("DELETE FROM resmi_tatiller WHERE id = ?", array($tatil_id));
         $message = 'Resmi tatil silindi!';
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_ekle'])) {
             );
             $message = 'Vardiya başarıyla eklendi!';
         } catch (Exception $e) {
-            $error = 'Hata: ' . $e->getMessage();
+            $error = 'HATA: ' . $e->getMessage();
         }
     }
 }
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_sil'])) {
         $db->query("UPDATE vardiya_sablonlari SET aktif = 0 WHERE id = ?", array($vardiya_id));
         $message = 'Vardiya pasif duruma getirildi!';
     } catch (Exception $e) {
-        $error = 'Hata: ' . $e->getMessage();
+        $error = 'HATA: ' . $e->getMessage();
     }
 }
 
