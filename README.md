@@ -119,11 +119,11 @@ http://localhost/vardiya/
 **Deneme Hesapları:**
 
 Yönetici:
-- Kullanıcı Adı: `admin`
+- Kullanıcı Adı: `bulut.bulutsun@cbu.edu.tr`
 - Şifre: `123456`
 
 Kullanıcı:
-- Kullanıcı Adı: `busra`
+- Kullanıcı Adı: `busra.ton@cbu.edu.tr`
 - Şifre: `123456`
 
 ## Kullanım Kılavuzu
