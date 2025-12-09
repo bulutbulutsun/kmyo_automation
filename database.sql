@@ -1,17 +1,7 @@
 /*
  Navicat Premium Data Transfer
-
- Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 100432 (10.4.32-MariaDB)
- Source Host           : localhost:3306
- Source Schema         : vardiya_otomasyonu
-
- Target Server Type    : MySQL
- Target Server Version : 100432 (10.4.32-MariaDB)
  File Encoding         : 65001
-
- Date: 03/12/2025 00:53:00
 */
 
 SET NAMES utf8mb4;
@@ -50,27 +40,24 @@ DROP TABLE IF EXISTS `kullanicilar`;
 CREATE TABLE `kullanicilar`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `personel_id` int NOT NULL,
-  `kullanici_adi` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
   `sifre` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
   `rol` enum('yonetici','kullanici') CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NULL DEFAULT 'kullanici',
   `son_giris` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `kullanici_adi`(`kullanici_adi` ASC) USING BTREE,
-  INDEX `personel_id`(`personel_id` ASC) USING BTREE,
-  INDEX `idx_kullanici`(`kullanici_adi` ASC) USING BTREE,
+  UNIQUE INDEX `unique_personel_login`(`personel_id` ASC) USING BTREE,
   CONSTRAINT `kullanicilar_ibfk_1` FOREIGN KEY (`personel_id`) REFERENCES `personel` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of kullanicilar
+-- Records of kullanicilar (Kullanıcı Adı Sütunu Kaldırıldı)
 -- ----------------------------
-INSERT INTO `kullanicilar` VALUES (1, 1, 'admin', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'yonetici', NULL);
-INSERT INTO `kullanicilar` VALUES (2, 2, 'rukiye', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
-INSERT INTO `kullanicilar` VALUES (3, 3, 'cihan', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
-INSERT INTO `kullanicilar` VALUES (4, 4, 'busra', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
-INSERT INTO `kullanicilar` VALUES (5, 5, 'merve', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
-INSERT INTO `kullanicilar` VALUES (6, 6, 'berkay', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
-INSERT INTO `kullanicilar` VALUES (7, 7, 'murat', '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (1, 1, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'yonetici', NULL);
+INSERT INTO `kullanicilar` VALUES (2, 2, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (3, 3, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (4, 4, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (5, 5, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (6, 6, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
+INSERT INTO `kullanicilar` VALUES (7, 7, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
 
 -- ----------------------------
 -- Table structure for mesai_kayitlari
@@ -89,10 +76,6 @@ CREATE TABLE `mesai_kayitlari`  (
   INDEX `idx_personel_tarih`(`personel_id` ASC, `tarih` ASC) USING BTREE,
   CONSTRAINT `mesai_kayitlari_ibfk_1` FOREIGN KEY (`personel_id`) REFERENCES `personel` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of mesai_kayitlari
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for nobet_programi
@@ -117,10 +100,6 @@ CREATE TABLE `nobet_programi`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of nobet_programi
--- ----------------------------
-
--- ----------------------------
 -- Table structure for personel
 -- ----------------------------
 DROP TABLE IF EXISTS `personel`;
@@ -134,12 +113,13 @@ CREATE TABLE `personel`  (
   `gorev_unvani` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
   `adres` text CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NULL,
   `telefon` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NULL DEFAULT NULL,
-  `eposta` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NULL DEFAULT NULL,
+  `eposta` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_turkish_ci NOT NULL,
   `aktif` tinyint(1) NULL DEFAULT 1,
   `olusturma_tarihi` timestamp NOT NULL DEFAULT current_timestamp,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `sicil_no`(`sicil_no` ASC) USING BTREE,
   UNIQUE INDEX `kimlik_no`(`kimlik_no` ASC) USING BTREE,
+  UNIQUE INDEX `eposta`(`eposta` ASC) USING BTREE,
   INDEX `idx_sicil`(`sicil_no` ASC) USING BTREE,
   INDEX `idx_kadro`(`kadro_turu` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
@@ -232,4 +212,3 @@ INSERT INTO `vardiya_sablonlari` VALUES (4, 'İç Vardiya 1', 'kampus_ici', '08:
 INSERT INTO `vardiya_sablonlari` VALUES (5, 'İç Vardiya 2', 'kampus_ici', '09:00:00', '17:00:00', 8.00, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
-
