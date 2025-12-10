@@ -49,7 +49,7 @@ CREATE TABLE `kullanicilar`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of kullanicilar
+-- Records of kullanicilar (Kullanıcı Adı Sütunu Kaldırıldı)
 -- ----------------------------
 INSERT INTO `kullanicilar` VALUES (1, 1, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'yonetici', NULL);
 INSERT INTO `kullanicilar` VALUES (2, 2, '$2y$10$JOdsHlvTdbrS7Vn1U/z9Xus9N/0GRFZkmQRV/G2TdqTqzybY435N2', 'kullanici', NULL);
@@ -166,25 +166,25 @@ CREATE TABLE `resmi_tatiller`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique_tarih`(`tarih` ASC) USING BTREE,
   INDEX `idx_yil`(`yil` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_turkish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of resmi_tatiller
 -- ----------------------------
-INSERT INTO `resmi_tatiller` VALUES (11, '29 Ekim Cumhuriyet Bayramı', '2025-10-29', 2025);
-INSERT INTO `resmi_tatiller` VALUES (12, 'Yılbaşı Tatili', '2025-01-01', 2025);
-INSERT INTO `resmi_tatiller` VALUES (13, 'Ramazan Bayramı #1', '2025-03-30', 2025);
-INSERT INTO `resmi_tatiller` VALUES (14, 'Ramazan Bayramı #2', '2025-03-31', 2025);
-INSERT INTO `resmi_tatiller` VALUES (15, 'Ramazan Bayramı #3', '2025-04-01', 2025);
-INSERT INTO `resmi_tatiller` VALUES (16, 'Ulusal Egemenlik ve  Çocuk Bayramı', '2025-04-23', 2025);
-INSERT INTO `resmi_tatiller` VALUES (17, 'İşçi Bayramı', '2025-05-01', 2025);
-INSERT INTO `resmi_tatiller` VALUES (18, 'Atatürk’ü Anma,  Gençlik ve Spor Bayramı', '2025-05-19', 2025);
-INSERT INTO `resmi_tatiller` VALUES (19, 'Kurban Bayramı #1', '2025-06-06', 2025);
-INSERT INTO `resmi_tatiller` VALUES (20, 'Kurban Bayramı #2', '2025-06-07', 2025);
-INSERT INTO `resmi_tatiller` VALUES (21, 'Kurban Bayramı #3', '2025-06-08', 2025);
-INSERT INTO `resmi_tatiller` VALUES (22, 'Kurban Bayramı #4', '2025-06-09', 2025);
-INSERT INTO `resmi_tatiller` VALUES (23, 'Demokrasi ve Milli  Birlik Günü', '2025-07-15', 2025);
-INSERT INTO `resmi_tatiller` VALUES (24, 'Zafer Bayramı', '2025-08-30', 2025);
+INSERT INTO `resmi_tatiller` VALUES (1, '29 Ekim Cumhuriyet Bayramı', '2025-10-29', 2025);
+INSERT INTO `resmi_tatiller` VALUES (2, 'Yılbaşı Tatili', '2025-01-01', 2025);
+INSERT INTO `resmi_tatiller` VALUES (3, 'Ramazan Bayramı #1', '2025-03-30', 2025);
+INSERT INTO `resmi_tatiller` VALUES (4, 'Ramazan Bayramı #2', '2025-03-31', 2025);
+INSERT INTO `resmi_tatiller` VALUES (5, 'Ramazan Bayramı #3', '2025-04-01', 2025);
+INSERT INTO `resmi_tatiller` VALUES (6, 'Ulusal Egemenlik ve  Çocuk Bayramı', '2025-04-23', 2025);
+INSERT INTO `resmi_tatiller` VALUES (7, 'İşçi Bayramı', '2025-05-01', 2025);
+INSERT INTO `resmi_tatiller` VALUES (8, 'Atatürk’ü Anma,  Gençlik ve Spor Bayramı', '2025-05-19', 2025);
+INSERT INTO `resmi_tatiller` VALUES (9, 'Kurban Bayramı #1', '2025-06-06', 2025);
+INSERT INTO `resmi_tatiller` VALUES (10, 'Kurban Bayramı #2', '2025-06-07', 2025);
+INSERT INTO `resmi_tatiller` VALUES (11, 'Kurban Bayramı #3', '2025-06-08', 2025);
+INSERT INTO `resmi_tatiller` VALUES (12, 'Kurban Bayramı #4', '2025-06-09', 2025);
+INSERT INTO `resmi_tatiller` VALUES (13, 'Demokrasi ve Milli  Birlik Günü', '2025-07-15', 2025);
+INSERT INTO `resmi_tatiller` VALUES (14, 'Zafer Bayramı', '2025-08-30', 2025);
 
 -- ----------------------------
 -- Table structure for vardiya_sablonlari
@@ -212,4 +212,3 @@ INSERT INTO `vardiya_sablonlari` VALUES (4, 'İç Vardiya 1', 'kampus_ici', '08:
 INSERT INTO `vardiya_sablonlari` VALUES (5, 'İç Vardiya 2', 'kampus_ici', '09:00:00', '17:00:00', 8.00, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;
-
