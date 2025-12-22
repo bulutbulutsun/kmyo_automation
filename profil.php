@@ -10,6 +10,7 @@ $personel_id = Session::getPersonelId();
 $message = '';
 $error = '';
 
+
 // Personel bilgilerini getir (Kullanıcı adı sütunu artık yok, k.rol var)
 $personel = $db->fetchOne(
     "SELECT p.*, k.rol, it.tercih_edilen_gun1, it.tercih_edilen_gun2 
