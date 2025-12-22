@@ -2,6 +2,7 @@
 require_once 'config.php';
 require_once 'nobet_algoritma.php';
 
+
 Session::start();
 $auth = new Auth();
 $auth->requireAdmin();
