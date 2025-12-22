@@ -51,6 +51,7 @@ $yaklasan_nobetler = $db->fetchAll(
     array($personel_id, $bugun, $gelecek_7_gun)
 );
 
+
 // Yönetici için ek istatistikler
 if ($is_admin) {
     // Toplam personel sayısı
