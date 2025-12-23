@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_ekle'])) {
     }
 }
 
-// Vardiya silme
+// Vardiya pasif yapma
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_sil'])) {
     $vardiya_id = $_POST['vardiya_id'] ?? 0;
     try {
@@ -84,11 +84,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_sil'])) {
     }
 }
 
+// Vardiya aktifleştirme (YENİ EKLENDİ)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['vardiya_aktiflestir'])) {
+    $vardiya_id = $_POST['vardiya_id'] ?? 0;
+    try {
+        $db->query("UPDATE vardiya_sablonlari SET aktif = 1 WHERE id = ?", array($vardiya_id));
+        $message = 'Vardiya başarıyla tekrar aktif duruma getirildi!';
+    } catch (Exception $e) {
+        $error = 'HATA: ' . $e->getMessage();
+    }
+}
+
 // Resmi tatilleri getir
 $resmi_tatiller = $db->fetchAll("SELECT * FROM resmi_tatiller ORDER BY tarih DESC");
 
 // Vardiyaları getir
-$vardialar = $db->fetchAll("SELECT * FROM vardiya_sablonlari ORDER BY lokasyon, id");
+$vardialar = $db->fetchAll("SELECT * FROM vardiya_sablonlari ORDER BY aktif DESC, lokasyon, id");
 
 ?>
 <!DOCTYPE html>
@@ -207,7 +218,7 @@ $vardialar = $db->fetchAll("SELECT * FROM vardiya_sablonlari ORDER BY lokasyon, 
                                             <td>
                                                 <form method="POST" style="display:inline;" onsubmit="return confirm('Silmek istediğinizden emin misiniz?')">
                                                     <input type="hidden" name="tatil_id" value="<?php echo $tatil['id']; ?>">
-                                                    <button type="submit" name="tatil_sil" class="btn btn-sm btn-danger">
+                                                    <button type="submit" name="tatil_sil" class="btn btn-sm btn-danger" title="Sil">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
                                                 </form>
@@ -266,8 +277,15 @@ $vardialar = $db->fetchAll("SELECT * FROM vardiya_sablonlari ORDER BY lokasyon, 
                                                 <?php if ($vardiya['aktif']): ?>
                                                 <form method="POST" style="display:inline;" onsubmit="return confirm('Pasif duruma getirmek istediğinizden emin misiniz?')">
                                                     <input type="hidden" name="vardiya_id" value="<?php echo $vardiya['id']; ?>">
-                                                    <button type="submit" name="vardiya_sil" class="btn btn-sm btn-danger">
+                                                    <button type="submit" name="vardiya_sil" class="btn btn-sm btn-danger" title="Pasif Yap">
                                                         <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
+                                                <?php else: ?>
+                                                <form method="POST" style="display:inline;" onsubmit="return confirm('Vardiyayı tekrar aktif duruma getirmek istediğinizden emin misiniz?')">
+                                                    <input type="hidden" name="vardiya_id" value="<?php echo $vardiya['id']; ?>">
+                                                    <button type="submit" name="vardiya_aktiflestir" class="btn btn-sm btn-success" title="Aktifleştir">
+                                                        <i class="bi bi-check-circle"></i>
                                                     </button>
                                                 </form>
                                                 <?php endif; ?>
@@ -318,7 +336,7 @@ $vardialar = $db->fetchAll("SELECT * FROM vardiya_sablonlari ORDER BY lokasyon, 
                 <form method="POST">
                     <div class="modal-header">
                         <h5 class="modal-title">Vardiya Ekle</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss=\"modal\"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
