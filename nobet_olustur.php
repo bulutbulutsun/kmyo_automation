@@ -2,7 +2,6 @@
 require_once 'config.php';
 require_once 'nobet_algoritma.php';
 
-
 Session::start();
 $auth = new Auth();
 $auth->requireAdmin();
@@ -193,6 +192,7 @@ foreach ($ayarlar as $ayar) {
                             </h5>
                             <ul class="mb-0 ps-3">
                                 <li class="mb-2">Sistem seçilen tarih aralığında tüm personel için otomatik nöbet programı oluşturur!</li>
+                                <li class="mb-2 text-danger fw-bold">Sistem rolü "Yönetici" olan kişiler nöbetten muaf tutulur!</li>
                                 <li class="mb-2">Memurlar haftada 5 gün (40 saat), işçiler haftada 6 gün (45 saat) çalışır!</li>
                                 <li class="mb-2">Her personel günlük 8 saat çalışır!</li>
                                 <li class="mb-2">Hafta tatili tercihleri dikkate alınır!</li>
@@ -207,7 +207,7 @@ foreach ($ayarlar as $ayar) {
                                     <i class="bi bi-exclamation-triangle me-2"></i>Uyarı
                                 </h6>
                                 <p class="mb-0 small">
-                                    Seçili tarih aralığındaki mevcut nöbet kayıtları silinecek ve yeniden oluşturulacaktır. 
+                                    Seçili tarih aralığındaki mevcut nöbet kayıtları silinecek ve yeniden oluşturulacaktır!
                                     Bu işlem geri alınamaz!
                                 </p>
                             </div>
