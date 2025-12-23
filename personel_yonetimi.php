@@ -148,13 +148,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['guncelle'])) {
     }
 }
 
-// Personel silme
+// Personel pasif duruma getirme (Silme)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sil'])) {
     $personel_id = $_POST['personel_id'] ?? 0;
     
     try {
         $db->query("UPDATE personel SET aktif = 0 WHERE id = ?", array($personel_id));
         $message = 'Personel pasif duruma getirildi!';
+    } catch (Exception $e) {
+        $error = 'HATA: ' . $e->getMessage();
+    }
+}
+
+// Personel aktifleştirme (YENİ EKLENDİ)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['aktiflestir'])) {
+    $personel_id = $_POST['personel_id'] ?? 0;
+    
+    try {
+        $db->query("UPDATE personel SET aktif = 1 WHERE id = ?", array($personel_id));
+        $message = 'Personel başarıyla tekrar aktif duruma getirildi!';
     } catch (Exception $e) {
         $error = 'HATA: ' . $e->getMessage();
     }
@@ -327,13 +339,23 @@ $gun_isimleri = array('Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 
                                                         data-rol="<?php echo $p['rol']; ?>"
                                                         data-tercih1="<?php echo $p['tercih_edilen_gun1'] ?? ''; ?>"
                                                         data-tercih2="<?php echo $p['tercih_edilen_gun2'] ?? ''; ?>">
-                                                    <i class="bi bi-pencil"></i>
+                                                    <i class="bi bi-pencil" title="Düzenle"></i>
                                                 </button>
+                                                
                                                 <?php if ($p['aktif']): ?>
+                                                <!-- Aktifse Pasif Yap butonu göster -->
                                                 <form method="POST" style="display:inline;" onsubmit="return confirm('Pasif duruma getirmek istediğinizden emin misiniz?')">
                                                     <input type="hidden" name="personel_id" value="<?php echo $p['id']; ?>">
-                                                    <button type="submit" name="sil" class="btn btn-sm btn-danger">
-                                                        <i class="bi bi-x-circle"></i>
+                                                    <button type="submit" name="sil" class="btn btn-sm btn-danger" title="Pasif Yap">
+                                                        <i class="bi bi-person-x"></i>
+                                                    </button>
+                                                </form>
+                                                <?php else: ?>
+                                                <!-- Pasifse Aktifleştir butonu göster -->
+                                                <form method="POST" style="display:inline;" onsubmit="return confirm('Personeli tekrar aktif duruma getirmek istediğinizden emin misiniz?')">
+                                                    <input type="hidden" name="personel_id" value="<?php echo $p['id']; ?>">
+                                                    <button type="submit" name="aktiflestir" class="btn btn-sm btn-success" title="Aktifleştir">
+                                                        <i class="bi bi-person-check"></i>
                                                     </button>
                                                 </form>
                                                 <?php endif; ?>
